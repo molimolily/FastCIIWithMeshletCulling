@@ -1,0 +1,98 @@
+#version 450
+
+layout(local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
+
+struct FrustumPlanes
+{
+	vec4 left;
+	vec4 right;
+	vec4 bottom;
+	vec4 top;
+	vec4 near;
+	vec4 far;
+};
+
+struct BoundingSphere
+{
+	vec3 center;
+	float radius;
+	vec3 coneAxis;
+	float coneCutOff;
+};
+
+struct DrawElementsIndirectCommand
+{
+	uint vertexCount;
+	uint instanceCount;
+	uint firstIndex;
+	uint baseVertex;
+	uint baseInstance;
+};
+
+layout (std140, binding = 0) uniform FrustumPlanesBuffer
+{
+	FrustumPlanes frustumPlanes;
+};
+
+layout(std430, binding = 0) buffer BoundingSpheresBuffer
+{
+	BoundingSphere boundingSpheres[];
+};
+
+layout(std430, binding = 1) buffer DrawCommandsBuffer
+{
+	DrawElementsIndirectCommand drawCommand[];
+};
+
+uniform mat4 model;
+uniform mat4 invTransModel;
+uniform mat4 view;
+uniform vec3 cameraPosition;
+uniform float scale;
+
+uniform int meshletCount;
+
+
+bool IsVisible(BoundingSphere sphere)
+{
+	// Cone culling
+	vec3 axis = normalize(invTransModel * vec4(sphere.coneAxis, 0.0)).xyz;
+	vec4 center = model * vec4(sphere.center, 1.0);
+	vec3 dir = normalize(center.xyz - cameraPosition);
+	if (dot(dir, axis) > sphere.coneCutOff)
+	{
+		return false;
+	}
+
+	// Frustum culling
+	vec4 pos = view * center;
+	float radius = sphere.radius * scale;
+    bool inLeft = dot(pos, frustumPlanes.left) + radius > 0;
+    bool inRight = dot(pos, frustumPlanes.right) + radius > 0;
+    bool inBottom = dot(pos, frustumPlanes.bottom) + radius > 0;
+    bool inTop = dot(pos, frustumPlanes.top) + radius > 0;
+    bool inNear = dot(pos, frustumPlanes.near) + radius > 0;
+    bool inFar = dot(pos, frustumPlanes.far) + radius > 0;
+
+	return inLeft && inRight && inBottom && inTop && inNear && inFar;
+}
+
+void main()
+{
+	uint id = gl_GlobalInvocationID.x;
+
+	if(id >= meshletCount)
+	{
+		return;
+	}
+
+	BoundingSphere sphere = boundingSpheres[id];
+	if(IsVisible(sphere))
+	{
+		drawCommand[id].instanceCount = 2;
+	}
+	else
+	{
+		drawCommand[id].instanceCount = 0;
+	}
+}

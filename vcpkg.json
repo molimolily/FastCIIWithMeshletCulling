@@ -1,0 +1,11 @@
+{
+  "name": "fastciiwithmeshletculling",
+  "version": "1.0.0",
+  "dependencies": [
+    { "name": "glad", "features": ["gl-api-46", "extensions"]},
+    { "name": "glfw3" },
+    { "name": "glm" },
+    { "name": "assimp" },
+    { "name": "meshoptimizer" }
+  ]
+}
