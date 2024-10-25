@@ -7,6 +7,7 @@
 #include "InputManager.h"
 #include "Timer.h"
 #include "MeshletCullingScene.h"
+#include "CIIScene.h"
 
 #define STRINGIZE(x) #x
 #define STRINGIZE_VALUE_OF(x) STRINGIZE(x)
@@ -83,7 +84,8 @@ int main()
 
 	initialize_glfw();
 
-	GLFWwindow* window = create_window("FastCII", screenWidth, screenHeight);
+	// GLFWwindow* window = create_window("FastCII", screenWidth, screenHeight);
+	GLFWwindow* window = create_window("Test", screenWidth, screenHeight, 2, true);
 	glfwMakeContextCurrent(window);
 	
 	intialize_glad();
@@ -95,6 +97,9 @@ int main()
 	glfwSetMouseButtonCallback(window, InputManager::MouseButtonCallback);
 	glfwSetScrollCallback(window, InputManager::ScrollCallback);
 
+	// 垂直同期OFF
+	glfwSwapInterval(0);
+
 	// デプステストを有効化
     glEnable(GL_DEPTH_TEST);
 
@@ -103,7 +108,8 @@ int main()
 
 	// Rendering Scope
 	{
-		auto scene = std::make_unique<MeshletCullingScene>();
+		// auto scene = std::make_unique<MeshletCullingScene>();
+		auto scene = std::make_unique<CIIScene>();
 
 		windowResizeEvents.Subscribe(
 			[&scene](int width, int height) {scene->OnWindowResize(width, height);

@@ -2,8 +2,6 @@
 
 MeshletCullingScene::MeshletCullingScene()
 {
-	std::cout << "Base Dir: " << basePath << std::endl;
-
 	grid = std::make_unique<Grid>();
 
 	camera = std::make_shared<Camera>();

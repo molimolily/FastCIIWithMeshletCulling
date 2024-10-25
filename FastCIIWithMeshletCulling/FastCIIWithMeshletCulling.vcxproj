@@ -80,7 +80,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);SOLUTION_DIR=$(SolutionDir.Replace('\', '\\'))</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vcpkg_installed\x64-windows\include;$(SolutionDir)\src\core;$(SolutionDir)src\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vcpkg_installed\x64-windows\include;$(SolutionDir)\src\core;$(SolutionDir)src\scene;$(SolutionDir)src\CII;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
@@ -101,7 +101,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);SOLUTION_DIR=$(SolutionDir.Replace('\', '\\'))</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vcpkg_installed\x64-windows\include;$(SolutionDir)\src\core;$(SolutionDir)src\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vcpkg_installed\x64-windows\include;$(SolutionDir)\src\core;$(SolutionDir)src\scene;$(SolutionDir)src\CII;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
@@ -122,7 +122,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);SOLUTION_DIR=$(SolutionDir.Replace('\', '\\'))</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vcpkg_installed\x64-windows\include;$(SolutionDir)\src\core;$(SolutionDir)src\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vcpkg_installed\x64-windows\include;$(SolutionDir)\src\core;$(SolutionDir)src\scene;$(SolutionDir)src\CII;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
@@ -143,7 +143,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);SOLUTION_DIR=$(SolutionDir.Replace('\', '\\'))</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vcpkg_installed\x64-windows\include;$(SolutionDir)\src\core;$(SolutionDir)src\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vcpkg_installed\x64-windows\include;$(SolutionDir)\src\core;$(SolutionDir)src\scene;$(SolutionDir)src\CII;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
@@ -158,6 +158,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\CII\CII.cpp" />
+    <ClCompile Include="..\src\CII\ElementalCamera.cpp" />
+    <ClCompile Include="..\src\CII\ElementalCameraGroup.cpp" />
     <ClCompile Include="..\src\core\BoundingBox.cpp" />
     <ClCompile Include="..\src\core\Camera.cpp" />
     <ClCompile Include="..\src\core\Compute.cpp" />
@@ -173,9 +176,13 @@
     <ClCompile Include="..\src\core\MultiDrawIndirectCommand.cpp" />
     <ClCompile Include="..\src\core\Shader.cpp" />
     <ClCompile Include="..\src\core\Transform.cpp" />
+    <ClCompile Include="..\src\scene\CIIScene.cpp" />
     <ClCompile Include="..\src\scene\MeshletCullingScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\shaders\CII.comp" />
+    <None Include="..\shaders\CII.frag" />
+    <None Include="..\shaders\CII.vert" />
     <None Include="..\shaders\frustum.frag" />
     <None Include="..\shaders\frustum.vert" />
     <None Include="..\shaders\grid.frag" />
@@ -186,6 +193,11 @@
     <None Include="..\vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\CII\CII.h" />
+    <ClInclude Include="..\src\CII\CIISettings.h" />
+    <ClInclude Include="..\src\CII\ElementalCamera.h" />
+    <ClInclude Include="..\src\CII\ElementalCameraGroup.h" />
+    <ClInclude Include="..\src\CII\Eye.h" />
     <ClInclude Include="..\src\core\AtomicCounterBuffer.h" />
     <ClInclude Include="..\src\core\BaseMesh.h" />
     <ClInclude Include="..\src\core\BoundingBox.h" />
@@ -209,6 +221,7 @@
     <ClInclude Include="..\src\core\Shader.h" />
     <ClInclude Include="..\src\core\Timer.h" />
     <ClInclude Include="..\src\core\Transform.h" />
+    <ClInclude Include="..\src\scene\CIIScene.h" />
     <ClInclude Include="..\src\scene\MeshletCullingScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,0 +1,114 @@
+#version 450
+
+layout(local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
+
+struct FrustumPlanes
+{
+	vec4 left;
+	vec4 right;
+	vec4 bottom;
+	vec4 top;
+	vec4 near;
+	vec4 far;
+};
+
+struct BoundingSphere
+{
+	vec3 center;
+	float radius;
+	vec3 coneAxis;
+	float coneCutOff;
+};
+
+struct DrawElementsIndirectCommand
+{
+	uint vertexCount;
+	uint instanceCount;
+	uint firstIndex;
+	uint baseVertex;
+	uint baseInstance;
+};
+
+layout (std140, binding = 1) uniform FrustumPlanesBuffer
+{
+	FrustumPlanes frustumPlanes;
+};
+
+layout (std140, binding = 2) uniform CornerCameraPositionBuffer
+{
+	vec3 cornerCameraPosition[4];
+};
+
+layout(std430, binding = 0) buffer DrawCommandsBuffer
+{
+	DrawElementsIndirectCommand drawCommand[];
+};
+
+layout(std430, binding = 1) buffer BoundingSpheresBuffer
+{
+	BoundingSphere boundingSpheres[];
+};
+
+uniform mat4 model;
+uniform mat4 view;
+uniform vec3 cameraPosition;
+
+uniform int meshletCount;
+uniform int instanceCount;
+uniform float scale;
+
+bool BackFaceCulling(BoundingSphere sphere)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		vec3 corner = cornerCameraPosition[i];
+		vec3 toSphere = sphere.center - corner;
+		if(dot(toSphere, sphere.coneAxis) < sphere.coneCutOff)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
+bool IsVisible(BoundingSphere sphere)
+{
+	/*if (dot(normalize(sphere.center - cameraPosition), sphere.coneAxis) > sphere.coneCutOff)
+	{
+		return false;
+	}*/
+
+	BackFaceCulling(sphere);
+
+	vec4 pos = view * model * vec4(sphere.center, 1.0);
+	float radius = sphere.radius * scale;
+    bool inLeft = dot(pos, frustumPlanes.left) + radius > 0;
+    bool inRight = dot(pos, frustumPlanes.right) + radius > 0;
+    bool inBottom = dot(pos, frustumPlanes.bottom) + radius > 0;
+    bool inTop = dot(pos, frustumPlanes.top) + radius > 0;
+    bool inNear = dot(pos, frustumPlanes.near) + radius > 0;
+    bool inFar = dot(pos, frustumPlanes.far) + radius > 0;
+
+	return inLeft && inRight && inBottom && inTop && inNear && inFar;
+}
+
+void main()
+{
+	uint id = gl_GlobalInvocationID.x;
+
+	if(id >= meshletCount)
+	{
+		return;
+	}
+
+	BoundingSphere sphere = boundingSpheres[id];
+	if(IsVisible(sphere))
+	{
+		drawCommand[id].instanceCount = instanceCount;
+	}
+	else
+	{
+		drawCommand[id].instanceCount = 0;
+	}
+}

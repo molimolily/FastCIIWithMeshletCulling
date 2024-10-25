@@ -19,6 +19,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{66d70f4f-76bb-4b6d-bf65-9ebda027b3a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CII">
+      <UniqueIdentifier>{4df18264-4fbf-458f-8e1f-8c7f78c4993a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\main.cpp">
@@ -69,6 +72,18 @@
     <ClCompile Include="..\src\scene\MeshletCullingScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\scene\CIIScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CII\CII.cpp">
+      <Filter>CII</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CII\ElementalCamera.cpp">
+      <Filter>CII</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CII\ElementalCameraGroup.cpp">
+      <Filter>CII</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\vcpkg.json" />
@@ -91,6 +106,15 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="..\shaders\meshletCullingScene.comp">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\shaders\CII.comp">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\shaders\CII.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\shaders\CII.vert">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
@@ -166,6 +190,24 @@
     </ClInclude>
     <ClInclude Include="..\src\scene\MeshletCullingScene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\scene\CIIScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CII\CII.h">
+      <Filter>CII</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CII\CIISettings.h">
+      <Filter>CII</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CII\ElementalCamera.h">
+      <Filter>CII</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CII\ElementalCameraGroup.h">
+      <Filter>CII</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CII\Eye.h">
+      <Filter>CII</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
